@@ -1,15 +1,26 @@
 <?php
 
+$errors = [];
     // --------------------------------------------------
     // Condition qui contient la logique de traitement du formulaire quand on reçoit une request POST
     // --------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Récupation des données du formulaire
-    $username = $_POST["username"] ??'';;
-    $email = $_POST["email"] ??'';;
-    $password = $_POST["password"] ??'';;
-    $confirmPassword = $_POST["confirmPassword"] ??'';;
-    var_dump($_POST);
+    $username = trim(htmlspecialchars($_POST["username"])) ??'';
+    $email = trim(htmlspecialchars($_POST["email"])) ??'';
+    $password = $_POST["password"] ??'';
+    $confirmPassword = $_POST["confirmPassword"] ??'';
+    var_dump($username, $email, $password, $confirmPassword);
+
+    // validation des données
+    // validation username
+    if (empty($username)) {
+        $errors = "Veuillez renseigner votre pseudo"
+    }
+    // validation email
+    if (empty($email)) {
+        $errors = "Veuillez renseigner votre email"
+    }
 }
 ?>
 
@@ -38,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
             <div class="sectionContainerConfirmPassword">
                 <label for="confirmPassword"> Confirmer votre password :</label><br>
-                <input placeholder="Confirm Password" type="password" id="confirmPassword" required><br>
+                <input placeholder="Confirm Password" type="password" id="confirmPassword" name="confirmPassword" required><br>
             </div>
             <div class="sectionContainerBtn">
                 <input type="submit" value="Envoyer"><br>
