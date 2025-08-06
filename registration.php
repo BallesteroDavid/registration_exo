@@ -10,16 +10,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim(htmlspecialchars($_POST["email"])) ??'';
     $password = $_POST["password"] ??'';
     $confirmPassword = $_POST["confirmPassword"] ??'';
-    var_dump($username, $email, $password, $confirmPassword);
+    // var_dump($username, $email, $password, $confirmPassword);
 
     // validation des données
     // validation username
+    // valide que le champ soit remplis
     if (empty($username)) {
-        $errors = "Veuillez renseigner votre pseudo"
+        $errors = "nom obligatoire";
+    // valide la function strlen si la string est de plus de 3 carac
+    }elseif (strlen($username)) {
+        $errors[] = "min 3 carac";
+    // valide la function strlen si la string est de moins de 55 carac
+    }elseif (strlen($username)) {
+        $errors[] = "max 55 carac";
     }
     // validation email
     if (empty($email)) {
-        $errors = "Veuillez renseigner votre email"
+        $errors = "email obligatoire ! (connard)";
+    }elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "format d'email invalide";
+    }
+    // validation password
+    if (empty($passsword)) {
+        $errors[] = "password obligatoire";
+    }elseif (strlen($password) < 8) {
+        $errors[] = "le mdp doit au moins contenir 8 carac";
+    // normalement ici on met un pattern (carac spéciaux, une maj, une minuscule, un chiffre ...)
+    }elseif ($password !== $confirmPassword) {
+        errors[] = "mdp doivent être identique "
     }
 }
 ?>
