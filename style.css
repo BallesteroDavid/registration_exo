@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sectionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sectionContainerUsername {
+    padding: 5px;
+}
+
+.sectionContainerEmail {
+    padding: 5px;
+}
+
+.sectionContainerPassword {
+    padding: 5px;
+}
+
+.sectionContainerConfirmPassword {
+    padding: 5px;
+}
+
+.sectionContainerBtn {
+    padding: 5px;
+}
