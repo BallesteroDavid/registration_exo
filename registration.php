@@ -19,10 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($username)) {
         $errors = "nom obligatoire";
     // valide la function strlen si la string est de plus de 3 carac
-    }elseif (strlen($username)) {
+    }elseif (strlen($username) < 3) {
         $errors[] = "min 3 carac";
     // valide la function strlen si la string est de moins de 55 carac
-    }elseif (strlen($username)) {
+    }elseif (strlen($username) > 55) {
         $errors[] = "max 55 carac";
     }
     // validation email
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "format d'email invalide";
     }
     // validation password
-    if (empty($passsword)) {
+    if (empty($password)) {
         $errors[] = "password obligatoire";
     }elseif (strlen($password) < 8) {
         $errors[] = "le mdp doit au moins contenir 8 carac";
@@ -48,7 +48,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // vérifier si l'adresse email est utilisé ou non 
         $checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
 
+        // la methode execute de mon objet pdo execute la request préparée
         $checkEmail->execute([$email]);
+
+        // une condition pour vérifier si je récupère quelque chose
+        if ($checkEmail->rowCount() > 0) {
+            $errors[] = "email déjà utilisée";
+        } else {
+            // dans le cas ou tout vas bien ! email pas utilisé
+            echo "ok";
+            // hashage du mdp
+           $hashpassword = password_hash($password, PASSWORD_DEFAULT);
+
+            var_dump($hashpassword);
+
+        }
 
         // try {
 
