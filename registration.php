@@ -1,4 +1,5 @@
 <?php
+require_once 'config/database.php';
 
 $errors = [];
     // --------------------------------------------------
@@ -37,7 +38,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "le mdp doit au moins contenir 8 carac";
     // normalement ici on met un pattern (carac spéciaux, une maj, une minuscule, un chiffre ...)
     }elseif ($password !== $confirmPassword) {
-        errors[] = "mdp doivent être identique "
+        $errors[] = "mdp doivent être identique";
+    }
+
+    if (empty($errors)) {
+        // logique de traitement en db
+        $pdo = dbConnexion();
+
+        // vérifier si l'adresse email est utilisé ou non 
+        $checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+
+        $checkEmail->execute([$email]);
+
+        // try {
+
+        // } catch (){
+
+        // }
     }
 }
 ?>
@@ -48,11 +65,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <section class="sectionContainer">
         <form action="" method="POST">
+            <?php 
+            foreach ($errors as $error) {
+                echo $error;
+            }
+            ?>
             <div class="sectionContainerUsername">
                 <label for="Pseudo">Pseudo :</label><br>
                 <input placeholder="Entrez votre pseudo" type="text" id="username" name="username" required><br>
