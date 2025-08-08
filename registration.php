@@ -2,6 +2,7 @@
 require_once 'config/database.php';
 
 $errors = [];
+$message = [];
     // --------------------------------------------------
     // Condition qui contient la logique de traitement du formulaire quand on reçoit une request POST
     // --------------------------------------------------
@@ -54,13 +55,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // une condition pour vérifier si je récupère quelque chose
         if ($checkEmail->rowCount() > 0) {
             $errors[] = "email déjà utilisée";
+            
         } else {
             // dans le cas ou tout vas bien ! email pas utilisé
             echo "ok";
             // hashage du mdp
            $hashpassword = password_hash($password, PASSWORD_DEFAULT);
 
-            var_dump($hashpassword);
+            // insertion des données en db
+
+            $insertUser = $pdo->prepare("
+            INSERT INTO users (username, email, password) 
+            VALUES (?, ?, ?)
+            ");
+
+            $insertUser->execute([$username, $email, $hashpassword]);
+            
+            $message = "Vous êtes bien enrengistré $username, tu as le droit à un kebab";
+
+
 
         }
 
@@ -87,6 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php 
             foreach ($errors as $error) {
                 echo $error;
+            }
+            if(!empty($message)) {
+                echo $message;
             }
             ?>
             <div class="sectionContainerUsername">
